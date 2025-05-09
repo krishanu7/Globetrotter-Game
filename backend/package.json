@@ -1,0 +1,11 @@
+{
+  "name": "globetrotter-backend",
+  "version": "1.0.0",
+  "description": "This is an assignment of headout",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "krishanu",
+  "license": "ISC"
+}
