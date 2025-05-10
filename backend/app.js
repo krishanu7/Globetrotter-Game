@@ -3,6 +3,7 @@ const cors = require('cors');
 const app = express();
 const authRoutes = require('./routes/auth')
 const gameRoutes = require('./routes/game.js');
+const scoreRoutes = require("./routes/score.js")
 const errorHandler = require("./middleware/errorHandler");
 
 app.use(cors());
@@ -17,6 +18,7 @@ app.get("/health-check", (req, res) => {
 
 app.use("/api/v1/auth", authRoutes)
 app.use("/api/v1/game", gameRoutes)
+app.use("/api/v1/score", scoreRoutes)
 
 app.use(errorHandler);
 

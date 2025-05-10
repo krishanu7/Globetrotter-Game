@@ -46,30 +46,41 @@ const createScoreEntry = async (userId) => {
 
 // updateScore
 const updateScore = async (userId, isCorrect) => {
+  console.log("[DEBUG] User having userId: ", userId, " guessed: ", isCorrect);
   try {
+    await db.query(
+      `INSERT INTO scores (user_id, total_score, correct_answers, incorrect_answers, total_attempts)
+       VALUES ($1, 0, 0, 0, 0)
+       ON CONFLICT (user_id) DO NOTHING`,
+      [userId]
+    );
+
     if (isCorrect) {
       await db.query(
         `UPDATE scores
-       SET total_score = total_score + 1,
-           correct_answers = correct_answers + 1,
-           total_attempts = total_attempts + 1
-       WHERE user_id = $1`,
+         SET total_score = total_score + 1,
+             correct_answers = correct_answers + 1,
+             total_attempts = total_attempts + 1
+         WHERE user_id = $1`,
         [userId]
       );
     } else {
       await db.query(
         `UPDATE scores
-       SET incorrect_answers = incorrect_answers + 1,
-           total_attempts = total_attempts + 1
-       WHERE user_id = $1`,
+         SET incorrect_answers = incorrect_answers + 1,
+             total_attempts = total_attempts + 1
+         WHERE user_id = $1`,
         [userId]
       );
     }
+
+    console.log("[DEBUG] Score updated successfully");
   } catch (error) {
     console.error("[ERROR] Error updating score:", error);
     throw error;
   }
 };
+
 // getScore
 const getScore = async (userId) => {
   const query = `
@@ -80,11 +91,10 @@ const getScore = async (userId) => {
   try {
     const res = await db.query(query, values);
     if (res.rows.length === 0) {
-      return null; 
+      return null;
     }
     return res.rows[0];
-  }
-  catch (error) {
+  } catch (error) {
     console.error("[ERROR] Error fetching score:", error);
     throw error;
   }
@@ -98,7 +108,7 @@ const getRandomDestination = async () => {
   try {
     const res = await db.query(query);
     if (res.rows.length === 0) {
-      return null; 
+      return null;
     }
     return res.rows[0];
   } catch (error) {
@@ -114,14 +124,14 @@ const getDestinationByID = async (id) => {
   try {
     const res = await db.query(query, values);
     if (res.rows.length === 0) {
-      return null; 
+      return null;
     }
     return res.rows[0];
   } catch (error) {
     console.error("[ERROR] Error fetching destination by ID:", error);
     throw error;
   }
-}
+};
 
 module.exports = {
   createUser,
@@ -130,5 +140,5 @@ module.exports = {
   updateScore,
   getScore,
   getRandomDestination,
-  getDestinationByID
+  getDestinationByID,
 };

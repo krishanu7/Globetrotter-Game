@@ -10,7 +10,7 @@ CREATE TABLE users (
 -- SCORES TABLE
 CREATE TABLE scores (
   id SERIAL PRIMARY KEY,
-  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  user_id INTEGER UNIQUE REFERENCES users(id) ON DELETE CASCADE,
   total_score INTEGER DEFAULT 0,
   correct_answers INTEGER DEFAULT 0,
   incorrect_answers INTEGER DEFAULT 0,
