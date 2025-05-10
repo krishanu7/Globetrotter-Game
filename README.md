@@ -66,6 +66,7 @@ The **Globetrotter Challenge** is a web-based geography quiz game where players 
 
 ## 📁 Project Structure
 
+``` bash
 globetrotter-challenge/
 ├── backend/
 │ ├── controllers/ # Route logic
@@ -88,7 +89,7 @@ globetrotter-challenge/
 │ ├── tailwind.config.js # Tailwind config
 │ ├── vite.config.js # Vite config
 ├── README.md
-
+```
 
 ---
 
