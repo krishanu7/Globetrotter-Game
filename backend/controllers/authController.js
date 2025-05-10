@@ -35,7 +35,6 @@ const loginUser = async (req, res) => {
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({ message: "Invalid credentials" });
@@ -45,7 +44,7 @@ const loginUser = async (req, res) => {
       expiresIn: "1h",
     });
 
-    return res.status(200).json({ token });
+    res.status(201).json({ token, user: { id: user.id, username: user.username } });
   } catch (error) {
     console.error("[ERROR] Error logging in user:", error);
     return res.status(500).json({ message: "Internal server error" });
