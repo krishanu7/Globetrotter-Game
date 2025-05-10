@@ -64,9 +64,10 @@ const GamePage = () => {
     const previousScores = { ...scores };
 
     try {
+      console.log('Selected Option:', selectedOption);
       const data = await api.checkAnswer({
         destinationId: gameData.destinationId,
-        selectedId: selectedOption,
+        selectedCity: selectedOption,
       });
       setResult(data);
 
@@ -108,9 +109,11 @@ const GamePage = () => {
                     {gameData?.options?.map((option) => (
                       <Button
                         key={option.id}
-                        variant={selectedOption === option.id ? 'default' : 'outline'}
-                        onClick={() => setSelectedOption(option.id)}
-                        className="w-full"
+                        className={`w-full ${selectedOption === option.name
+                          ? 'bg-blue-600 text-white hover:bg-blue-700'
+                          : 'bg-gray-200 text-black hover:bg-gray-300'
+                          } transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
+                        onClick={() => setSelectedOption(option.name)}
                       >
                         {option.name}
                       </Button>
@@ -119,7 +122,10 @@ const GamePage = () => {
                   <Button
                     onClick={handleAnswer}
                     disabled={!selectedOption}
-                    className="mt-4 w-full"
+                    className={`mt-4 w-full ${!selectedOption
+                      ? 'bg-gray-400 text-gray-700 cursor-not-allowed'
+                      : 'bg-green-500 text-white hover:bg-green-600'
+                      } transition-colors focus:ring-2 focus:ring-green-500 focus:ring-offset-2`}
                   >
                     Submit Answer
                   </Button>
@@ -133,7 +139,7 @@ const GamePage = () => {
                       <p className="text-center">Fun Fact 😂: {result.funFact}</p>
                       <Button
                         onClick={fetchGameData}
-                        className="mt-4 w-full"
+                        className="mt-4 w-full bg-purple-600 text-white hover:bg-purple-700 transition-colors focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
                       >
                         Next Challenge
                       </Button>

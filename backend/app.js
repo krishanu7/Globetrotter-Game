@@ -10,6 +10,7 @@ const errorHandler = require("./middleware/errorHandler");
 require('dotenv').config();
 
 const allowedOrigins = [
+  'http://localhost:5173',
   'https://globetrotter-game-pi.vercel.app',
   'https://globetrotter-game-krishanu7s-projects.vercel.app'
 ];
@@ -18,6 +19,7 @@ app.use(cors({
   origin: allowedOrigins,
   methods: ['GET', 'POST', 'PUT', 'DELETE']
 }));
+
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));

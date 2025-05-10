@@ -41,12 +41,12 @@ const getClues = async (req, res) => {
 
 const submitGuess = async (req, res) => {
   try {
-    const { destinationId, selectedId } = req.body;
+    const { destinationId, selectedCity } = req.body;
 
     console.log("[DEBUG] Guess submitted:", req.body);
 
-    if (!destinationId || selectedId === undefined) {
-      return res.status(400).json({ message: "Destination ID and selected ID are required" });
+    if (!destinationId || selectedCity === undefined) {
+      return res.status(400).json({ message: "Destination ID and selected City are required" });
     }
 
     const destination = await getDestinationByID(destinationId);
@@ -55,7 +55,7 @@ const submitGuess = async (req, res) => {
       return res.status(404).json({ message: "Destination not found" });
     }
 
-    const isCorrect = destination.id === selectedId;
+    const isCorrect = destination.city.toLowerCase() === selectedCity.toLowerCase();
 
     await updateScore(req.user.id, isCorrect);
 
