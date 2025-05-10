@@ -9,7 +9,7 @@ const InvitePopup = () => {
   const [open, setOpen] = useState(false);
 
   const handleShare = () => {
-    const inviteLink = `${window.location.origin}/?inviter=${user.id}`;
+    const inviteLink = `http://${window.location.hostname}/?inviter=${user.id}`;
     const message = `Join me on Globetrotter Challenge! My score: Check it out! ${inviteLink}`;
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');

@@ -6,13 +6,20 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import useApi from '../hooks/useApi';
 import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { login } = useContext(AuthContext);
+  const { user, login } = useContext(AuthContext);
   const api = useApi();
+  const navigator = useNavigate();
+
+
+  if (user) {
+    navigator('/');
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();

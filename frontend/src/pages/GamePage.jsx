@@ -7,6 +7,7 @@ import Confetti from '../components/Confetti';
 import SadFace from '../components/SadFace';
 import InvitePopup from '../components/InvitePopup';
 import useApi from '../hooks/useApi';
+import ScoreSection from '../components/ScoreSection';
 
 const GamePage = () => {
   const [gameData, setGameData] = useState(null);
@@ -49,7 +50,11 @@ const GamePage = () => {
   const fetchInviteeScore = async (userId) => {
     try {
       const data = await api.getInviteeScore(userId);
-      setInvitee(data);
+      setInvitee({
+        username: data?.score?.username,
+        correct_answers: data?.score?.correct_answers,
+        incorrect_answers: data?.score?.incorrect_answers,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -64,7 +69,7 @@ const GamePage = () => {
         selectedId: selectedOption,
       });
       setResult(data);
-      
+
       const updatedScores = {
         total_attempts: previousScores.total_attempts + 1,
         correct_answers: previousScores.correct_answers + (data.isCorrect ? 1 : 0),
@@ -73,17 +78,22 @@ const GamePage = () => {
       };
       setScores(updatedScores);
       fetchScores();
-
-      console.log(scores);
     } catch (error) {
       console.error(error);
       setScores(previousScores);
     }
   };
 
+  const handleInvite = () => {
+    const userId = scores?.userId;
+    const inviteLink = `http://${window.location.hostname}/game?inviter=${userId}`;
+    alert(`I just played Globetrotter! Can you beat my score?\nPlay here: ${inviteLink}`);
+  };
+
+
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      <div className="max-w-7xl mx-auto grid grid-cols-3 gap-4">
+    <div className="min-h-screen bg-gradient-to-r from-blue-500 to-purple-500 p-4 ">
+      <div className="max-w-7xl mx-auto mt-10 grid grid-cols-3 gap-4">
         {/* Game Section */}
         <div className="col-span-2 space-y-4">
           <Card>
@@ -133,27 +143,10 @@ const GamePage = () => {
               )}
             </CardContent>
           </Card>
-          <InvitePopup />
+          <InvitePopup handleInvite={handleInvite} />
         </div>
         {/* Score Section */}
-        <Card className={"h-50"}>
-          <CardHeader>
-            <CardTitle>Your Score</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>Total Score: {scores?.score?.total_score}</p>
-            <p>Correct Answers: {scores?.score?.correct_answers}</p>
-            <p>Incorrect Answers: {scores?.score?.incorrect_answers}</p>
-            <p>Total Attempts: {scores?.score?.total_attempts}</p>
-            {invitee && (
-              <div className="mt-4">
-                <p>Invited by: {invitee.username}</p>
-                <p>Their Correct: {invitee.scores.correct_answers}</p>
-                <p>Their Incorrect: {invitee.scores.incorrect_answers}</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+        <ScoreSection scores={scores} invitee={invitee} />
       </div>
     </div>
   );
