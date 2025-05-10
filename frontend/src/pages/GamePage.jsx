@@ -12,7 +12,7 @@ const GamePage = () => {
   const [gameData, setGameData] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
   const [result, setResult] = useState(null);
-  const [scores, setScores] = useState({ correct_score: 0, incorrect_score: 0 });
+  const [scores, setScores] = useState({ total_score: 0, correct_answers: 0, incorrect_answers: 0, total_attempts: 0 });
   const [invitee, setInvitee] = useState(null);
   const [searchParams] = useSearchParams();
   const api = useApi();
@@ -24,7 +24,7 @@ const GamePage = () => {
     if (inviterId) {
       fetchInviteeScore(inviterId);
     }
-  }, []);
+  }, [searchParams]);
 
   const fetchGameData = async () => {
     try {
@@ -56,15 +56,28 @@ const GamePage = () => {
   };
 
   const handleAnswer = async () => {
+    const previousScores = { ...scores };
+
     try {
       const data = await api.checkAnswer({
         destinationId: gameData.destinationId,
         selectedId: selectedOption,
       });
       setResult(data);
+      
+      const updatedScores = {
+        total_attempts: previousScores.total_attempts + 1,
+        correct_answers: previousScores.correct_answers + (data.isCorrect ? 1 : 0),
+        incorrect_answers: previousScores.incorrect_answers + (data.isCorrect ? 0 : 1),
+        total_score: previousScores.total_score + (data.isCorrect ? 1 : 0),
+      };
+      setScores(updatedScores);
       fetchScores();
+
+      console.log(scores);
     } catch (error) {
       console.error(error);
+      setScores(previousScores);
     }
   };
 
@@ -80,9 +93,9 @@ const GamePage = () => {
             <CardContent>
               {gameData && (
                 <>
-                  <ClueCard clues={gameData.clues} />
+                  <ClueCard clues={gameData?.clues} />
                   <div className="mt-4 grid grid-cols-2 gap-2">
-                    {gameData.options.map((option) => (
+                    {gameData?.options?.map((option) => (
                       <Button
                         key={option.id}
                         variant={selectedOption === option.id ? 'default' : 'outline'}
@@ -107,7 +120,7 @@ const GamePage = () => {
                       <p className="text-center text-lg">
                         {result.isCorrect ? 'Correct!' : 'Incorrect!'}
                       </p>
-                      <p className="text-center">Fun Fact: {result.funFact}</p>
+                      <p className="text-center">Fun Fact 😂: {result.funFact}</p>
                       <Button
                         onClick={fetchGameData}
                         className="mt-4 w-full"
@@ -122,19 +135,21 @@ const GamePage = () => {
           </Card>
           <InvitePopup />
         </div>
-
-        <Card>
+        {/* Score Section */}
+        <Card className={"h-50"}>
           <CardHeader>
             <CardTitle>Your Score</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>Correct: {scores.correct_score || 0}</p>
-            <p>Incorrect: {scores.incorrect_score || 0}</p>
+            <p>Total Score: {scores?.score?.total_score}</p>
+            <p>Correct Answers: {scores?.score?.correct_answers}</p>
+            <p>Incorrect Answers: {scores?.score?.incorrect_answers}</p>
+            <p>Total Attempts: {scores?.score?.total_attempts}</p>
             {invitee && (
               <div className="mt-4">
                 <p>Invited by: {invitee.username}</p>
-                <p>Their Correct: {invitee.scores.correct_score || 0}</p>
-                <p>Their Incorrect: {invitee.scores.incorrect_score || 0}</p>
+                <p>Their Correct: {invitee.scores.correct_answers}</p>
+                <p>Their Incorrect: {invitee.scores.incorrect_answers}</p>
               </div>
             )}
           </CardContent>

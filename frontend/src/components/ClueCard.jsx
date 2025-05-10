@@ -8,7 +8,7 @@ const ClueCard = ({ clues }) => {
       </CardHeader>
       <CardContent>
         <ul className="list-disc list-inside space-y-2">
-          {clues.map((clue, index) => (
+          {clues?.map((clue, index) => (
             <li key={index} className="text-gray-700">{clue}</li>
           ))}
         </ul>

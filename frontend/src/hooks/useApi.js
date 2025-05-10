@@ -24,10 +24,7 @@ const useApi = () => {
       }
 
       const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || 'Something went wrong');
-      }
-
+      
       return data;
     } catch (error) {
       throw error;
@@ -37,9 +34,9 @@ const useApi = () => {
   return {
     login: (credentials) => apiCall('/auth/login', 'POST', credentials),
     signup: (credentials) => apiCall('/auth/register', 'POST', credentials),
-    getGameData: () => apiCall('/game/data'),
-    checkAnswer: (data) => apiCall('/game/answer', 'POST', data),
-    getScores: () => apiCall('/score'),
+    getGameData: () => apiCall('/game/clues'),
+    checkAnswer: (data) => apiCall('/game/guess', 'POST', data),
+    getScores: () => apiCall('/score', 'GET', null),
     getInviteeScore: (userId) => apiCall(`/score/invitee/${userId}`),
   };
 };
