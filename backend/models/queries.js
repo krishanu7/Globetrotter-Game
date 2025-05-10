@@ -90,10 +90,9 @@ const getScore = async (userId) => {
   }
 };
 
-// getRandomQuestion
-const getRandomQuestion = async () => {
+const getRandomDestination = async () => {
   const query = `
-    SELECT * FROM questions
+    SELECT * FROM destinations
     ORDER BY RANDOM()
     LIMIT 1`;
   try {
@@ -108,11 +107,28 @@ const getRandomQuestion = async () => {
   }
 };
 
+const getDestinationByID = async (id) => {
+  const query = `
+    SELECT * FROM destinations WHERE id = $1`;
+  const values = [id];
+  try {
+    const res = await db.query(query, values);
+    if (res.rows.length === 0) {
+      return null; 
+    }
+    return res.rows[0];
+  } catch (error) {
+    console.error("[ERROR] Error fetching destination by ID:", error);
+    throw error;
+  }
+}
+
 module.exports = {
   createUser,
   getUserByUsername,
   createScoreEntry,
   updateScore,
   getScore,
-  getRandomQuestion
+  getRandomDestination,
+  getDestinationByID
 };
