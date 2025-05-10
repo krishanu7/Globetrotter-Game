@@ -50,7 +50,6 @@ The **Globetrotter Challenge** is a web-based geography quiz game where players 
 
 - **Node.js / Express** – Server framework
 - **PostgreSQL** – Relational database
-- **Sequelize** – ORM for DB queries
 - **JWT** – JSON Web Token for auth
 - **bcrypt** – Password hashing
 - **Docker** – Containerization
@@ -108,15 +107,15 @@ All endpoints are prefixed with `/api/v1`.
 
 | Method | Endpoint  | Description                 | Auth Required |
 |--------|-----------|-----------------------------|----------------|
-| GET    | /         | Fetch clues and options     | ✅             |
-| POST   | /submit   | Submit answer and result    | ✅             |
+| GET    | /clue     | Fetch clues and options     | ✅             |
+| POST   | /check    | Submit answer and result    | ✅             |
 
 ### Score (`/score`)
 
 | Method | Endpoint              | Description                      | Auth Required |
 |--------|------------------------|----------------------------------|----------------|
 | GET    | /                      | Get current user’s scores        | ✅             |
-| GET    | /invitee/:userId       | Get inviter's score (public)     | ❌             |
+| GET    | /invitee/:userId       | Get inviter's score (public)     | ✅             |
 
 ---
 
