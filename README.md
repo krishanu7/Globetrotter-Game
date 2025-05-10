@@ -130,5 +130,8 @@ All endpoints are prefixed with `/api/v1`.
 - npm (Node package manager)
 
 ---
+## 🛠️ High Level Design
+<img width="1046" alt="Screenshot 2025-05-11 at 3 43 42 AM" src="https://github.com/user-attachments/assets/3f25c17d-e7af-4566-baad-33fef39a1efa" />
+
 
 
