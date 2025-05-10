@@ -12,7 +12,7 @@ const useApi = () => {
     };
 
     try {
-      const response = await fetch(`http://localhost:8080/api/v1${url}`, {
+      const response = await fetch(`https://globetrotter-game-afbr.onrender.com/api/v1${url}`, {
         method,
         headers,
         body: body ? JSON.stringify(body) : null,
