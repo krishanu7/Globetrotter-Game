@@ -26,6 +26,10 @@ CREATE TABLE destinations (
   fun_fact TEXT[],    -- Array of fun facts
   trivia TEXT[]       -- Array of trivia
 );
+CREATE TABLE IF NOT EXISTS city (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL
+);
 
 -- DESTINATIONS SEED DATA
 
@@ -76,3 +80,23 @@ VALUES
     'The Empire State Building has its own zip code: 10118.'
   ]
 );
+
+INSERT INTO city (name)
+VALUES 
+  ('Tokyo'),
+  ('Paris'),
+  ('Berlin'),
+  ('Moscow'),
+  ('Beijing'),
+  ('Seoul'),
+  ('New York'),
+  ('Los Angeles'),
+  ('Cape Town'),
+  ('Barcelona'),
+  ('Rome'),
+  ('Vienna'),
+  ('Cairo'),
+  ('Bangkok'),
+  ('Amsterdam'),
+  ('Toronto'),
+  ('Vancouver');

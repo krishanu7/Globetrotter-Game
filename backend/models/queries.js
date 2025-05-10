@@ -82,11 +82,13 @@ const updateScore = async (userId, isCorrect) => {
 };
 
 // getScore
-const getScore = async (userId) => {
+ const getScore = async (userId) => {
   const query = `
-    SELECT total_score, correct_answers, incorrect_answers, total_attempts
-    FROM scores
-    WHERE user_id = $1`;
+    SELECT s.total_score, s.correct_answers, s.incorrect_answers, s.total_attempts, u.username
+    FROM scores s
+    JOIN users u ON s.user_id = u.id
+    WHERE s.user_id = $1
+  `;
   const values = [userId];
   try {
     const res = await db.query(query, values);
@@ -99,6 +101,7 @@ const getScore = async (userId) => {
     throw error;
   }
 };
+
 
 const getRandomDestination = async () => {
   const query = `
@@ -133,6 +136,19 @@ const getDestinationByID = async (id) => {
   }
 };
 
+
+const getMultipleRandomCityOptionsExcluding = async (excludedName, count = 3) => {
+  const result = await db.query(
+    `SELECT id, name FROM (
+       SELECT id, name FROM city WHERE name != $1 ORDER BY RANDOM() LIMIT $2
+     ) AS subquery`,
+    [excludedName, count]
+  );
+
+  return result.rows;
+};
+
+
 module.exports = {
   createUser,
   getUserByUsername,
@@ -141,4 +157,5 @@ module.exports = {
   getScore,
   getRandomDestination,
   getDestinationByID,
+  getMultipleRandomCityOptionsExcluding
 };
